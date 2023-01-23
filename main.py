@@ -19,39 +19,6 @@ list_of_proxy_sources = [
     "https://raw.githubusercontent.com/jetkai/proxy-list/main/online-proxies/txt/proxies.txt",
     ]
 
-'''
-Github Definitions:
-'''
-
-def upload_to_github(list: List[str]) -> None:
-    OWNER = "ethanperrine"
-    REPO = "REPO"
-    BRANCH = "BRANCH"
-    FILE = "FILE"
-    TOKEN = "YOUR_PERSONAL_ACCESS_TOKEN"
-    for proxy in list:
-        headers = {
-            "Accept": "application/vnd.github+json",
-            "Authorization": f"Token {TOKEN}",
-            "Content-Type": "application/json",
-        }
-        #get the SHA of the file
-        url = f"https://api.github.com/repos/{OWNER}/{REPO}/contents/{FILE}?ref={BRANCH}"
-        response = requests.get(url,headers = headers)
-        if response.status_code != 200:
-            print(f"Failed to get the sha of the file. Status Code: {response.status_code}")
-            continue
-        data = json.loads(response.text)
-        sha = data["sha"]
-        
-        content = proxy + "\n"
-        data = {
-            "message": "Upload new proxy",
-            "content": content,
-            "sha": sha,
-        }
-        url = f"https://api.github.com/repos/{OWNER}/{REPO}/contents/{FILE}"
-
 def scrape_proxies(website_sources: List[str]) -> Union[List[str], str]:
     proxies = []
     pattern = r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5}\b"
